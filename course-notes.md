@@ -117,3 +117,63 @@ true)
 
 3. Responsibility of identify the arguments to process shifted to one central file
 4. Promote usage of DTOs which is a very good practice
+
+### Docker - Running docker postgres image:
+
+> docker run --name postgres-nest -p 5432:5432 -e POSTGRES_PASSWORD=postgres -d postgres
+
+> docker run (run a container)
+> --name postgres-nest (how to name the docker image)
+> -p 5432:5432 (maping the image port number to my machine port number, in this case is the same portnumber)
+> -e POSTGRES_PASSWORD=postgres (this is environment variable setting a password)
+> -d postgres (is going to run in detached mode, if you run your terminal it will keep running )
+
+- **check list of docker images running:**
+  > docker container ls
+- **stop docker image:**
+  > docker container stop postgres-nest
+- **stop docker image:**
+  > docker container stop postgres-nest
+
+## NestJs - Object Relational Mapping (ORM)
+
+- - **Object-Relational Mapping (ORM)** is a techinque that lets you query and manipulate data from a database, using an object-orientend paradigm.
+- - there are many ORM lubraries that allow developers to communicate to the database using their preferred programming language - rather than sending plain queries directly
+
+### Pros and cons of using ORM library:
+
+- - **Pros**.- Writing the data model in one place - easier to mainain. less repetition.
+- - Lots of things done automatically - database handling, data types, relations etcetera.
+- - No need to write a SQL syntax (easy to learn, hard to master). Using your natural way of coding
+- - Database abstraction - you can change the database type whenever you wish
+- - leverages OOP, therefore things like inheritance are asey to achieve
+
+- - **Cons**.- You have to learn it, and ORM libraries are not always simple.
+- - Performance is alright, but it´s easy to neglect.
+- - Makes it easy to forget (or never learn) what´s happening behind the scenes, which can lead to a variety of maintainability issues
+
+### TypeORM
+
+- - TypeORM is an ORM library that can run in Node.js and be used with TypeScript (or Javascript)
+
+- - Helps us to define and manage entities, repositories, columns, relations, replication, indices, queries, logging and so much more.
+- - **Example**: Retrieving all taks owned by "Ashley" and are of status "done"
+
+` -- TypeORM: const tasks = await Task.find({ status: 'DONE', user:'Ashley' })`
+
+` --Pure JavaScript:
+let tasks;
+db.query('SELECT \* FROM tasks WHERE status = "DONE" AND user= "Ashley", (err,result)=>{
+if(err){
+throw new Erro('Could not retrieve tasks!')
+}
+tasks= result.rows;
+} ');
+
+`
+
+---
+
+## Install typeORM:
+
+- npm install typeorm @nestjs/typeorm pg
