@@ -7,8 +7,12 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 
+import { AuthGuard } from '@nestjs/passport';
+
+//Services
 import { TasksService } from './services/tasks.service';
 
 //Interfaces
@@ -24,6 +28,7 @@ import { UpdateTaskStatusDto } from './dto/update-task.dto';
 import { Task } from './entities/task.entity';
 
 @Controller('tasks')
+@UseGuards(AuthGuard())
 export class TasksController {
   constructor(private tasksService: TasksService) {}
 
@@ -56,21 +61,4 @@ export class TasksController {
   getTasks(@Query() filterDto: GetTasksFilterDto): Promise<Task[]> {
     return this.tasksService.getTasks(filterDto);
   }
-
-  //#### Local memory version
-  // // 1. Stablish a valid status
-  // // 2. stablish is not a empty parameter
-
-  // @Get('/:id')
-  // getTaskById(@Param('id') id: string): Task {
-  //   return this.tasksService.getTaskById(id);
-  // }
-
-  // @Post()
-  // createTask(
-  //   /*@Body('title') title, @Body('description') description*/
-  //   @Body() createTaskDto: CreateTaskDto,
-  // ) {
-  //   return this.tasksService.createTask(createTaskDto);
-  // }
 }

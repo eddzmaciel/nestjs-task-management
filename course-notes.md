@@ -177,3 +177,26 @@ tasks= result.rows;
 ## Install typeORM:
 
 - npm install typeorm @nestjs/typeorm pg
+
+**Hash**.- one way function, securely storing passwords
+
+- when you hash a password when creating a user, and try to login, you are replicating the hash, if it match we may be able to login
+
+username: edsonmaciel ---> salted: df23refsdfs_edsonmaciel
+pasword: Pass1234 ----> hashed: (salted_hashed) 123dsfsdfwe_23sdfsdf23ef
+
+**JSON Web Tokens**
+
+- Open-source Industry Standard (RFC-7519)
+- Usable for authorization or secure exchange of information between parties
+- Verify that the sender is who is/he/she claims to be
+
+### JWT Structure
+
+- Header.- Contains metadata abou the token (type, hashing algorithm etc)
+- Payload.- contains claims (statements about an entity - for example, a user and additional data)
+- Signature is the result of the encoded header, the encoded payload, signed against a secret (a secret that only we known)
+
+JSON Web Token can be decoded by anyone. They Should not contain sensitive information such as passwords
+
+it is useful for front-end applications to use these tokens to toggle
