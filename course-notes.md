@@ -200,3 +200,5 @@ pasword: Pass1234 ----> hashed: (salted_hashed) 123dsfsdfwe_23sdfsdf23ef
 JSON Web Token can be decoded by anyone. They Should not contain sensitive information such as passwords
 
 it is useful for front-end applications to use these tokens to toggle
+
+## Create a database relation

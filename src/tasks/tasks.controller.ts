@@ -26,6 +26,10 @@ import { UpdateTaskStatusDto } from './dto/update-task.dto';
 
 //Entities
 import { Task } from './entities/task.entity';
+import { User } from '../auth/entities/user.entity';
+
+//Custom Decorators
+import { GetUser } from 'src/auth/decorators/get-user.decorator';
 
 @Controller('tasks')
 @UseGuards(AuthGuard())
@@ -38,8 +42,12 @@ export class TasksController {
   }
 
   @Post()
-  createTask(@Body() createTaskDto: CreateTaskDto): Promise<Task> {
-    return this.tasksService.createTask(createTaskDto);
+  createTask(
+    @Body() createTaskDto: CreateTaskDto,
+    //with this created Decorator we are getting access to our entire user
+    @GetUser() user: User,
+  ): Promise<Task> {
+    return this.tasksService.createTask(createTaskDto, user);
   }
 
   @Delete('/:id')
@@ -58,7 +66,13 @@ export class TasksController {
   }
 
   @Get()
-  getTasks(@Query() filterDto: GetTasksFilterDto): Promise<Task[]> {
-    return this.tasksService.getTasks(filterDto);
+  getTasks(
+    @Query() filterDto: GetTasksFilterDto,
+    /* to be sure that we are retrieving  only the tasks 
+       that belongs to the logged user 
+    */
+    @GetUser() user: User,
+  ): Promise<Task[]> {
+    return this.tasksService.getTasks(filterDto, user);
   }
 }

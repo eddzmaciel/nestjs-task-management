@@ -13,6 +13,7 @@ import { TasksRepository } from '../repositories/tasks.repository';
 
 //Entities
 import { Task } from '../entities/task.entity';
+import { User } from '../../auth/entities/user.entity';
 
 @Injectable()
 export class TasksService {
@@ -22,8 +23,8 @@ export class TasksService {
     private tasksRepository: TasksRepository,
   ) {}
 
-  getTasks(filterDto: GetTasksFilterDto): Promise<Task[]> {
-    return this.tasksRepository.getTasks(filterDto);
+  getTasks(filterDto: GetTasksFilterDto, user: User): Promise<Task[]> {
+    return this.tasksRepository.getTasks(filterDto, user);
   }
 
   async getTaskById(id: string): Promise<Task> {
@@ -36,8 +37,8 @@ export class TasksService {
 
   //we moved the logic to the repository file
   // we dont have an await, that´s why we don´t use an async function here
-  createTask(createTaskDto: CreateTaskDto): Promise<Task> {
-    return this.tasksRepository.createTask(createTaskDto);
+  createTask(createTaskDto: CreateTaskDto, user: User): Promise<Task> {
+    return this.tasksRepository.createTask(createTaskDto, user);
   }
 
   async deleteTask(id: string): Promise<void> {
