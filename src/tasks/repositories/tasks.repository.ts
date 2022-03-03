@@ -11,18 +11,20 @@ import { TaskStatus } from '../tasks-status.enum';
 import { CreateTaskDto } from '../dto/create-task.dto';
 import { GetTasksFilterDto } from '../dto/get-task-filter.dto';
 
+//Logger
+import { InternalServerErrorException, Logger } from '@nestjs/common';
+
 @EntityRepository(Task)
 export class TasksRepository extends Repository<Task> {
+  //implementing a logger
+  //second parameter is timestamp enabling
+  private logger = new Logger('TaskRepository', { timestamp: true });
+
   async getTasks(filterDto: GetTasksFilterDto, user: User): Promise<Task[]> {
     const { status, search } = filterDto;
-
     //refering to the entity
     const query = this.createQueryBuilder('task');
-
-    /* 
-      filter the task that belongs to the logged user
-
-    */
+    /* filter the task that belongs to the logged user */
     query.where({ user });
 
     //if the user provide the 'status' filter
@@ -41,8 +43,19 @@ export class TasksRepository extends Repository<Task> {
       );
     }
 
-    const tasks = await query.getMany();
-    return tasks;
+    try {
+      const tasks = await query.getMany();
+      return tasks;
+    } catch (error) {
+      //the stack is the error that comes from the database!!
+      this.logger.error(
+        `Failed to get tasks for user "${
+          user.username
+        }". FILTERS: ${JSON.stringify(filterDto)}`,
+        error.stack,
+      );
+      throw new InternalServerErrorException();
+    }
   }
 
   async createTask(createTaskDto: CreateTaskDto, user: User): Promise<Task> {

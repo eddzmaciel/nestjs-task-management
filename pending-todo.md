@@ -35,7 +35,7 @@ https://jwt.io/
 ### Functionality and packages to integrate:
 
 - Run crown job that execute a general report each specific time
-- stablis a operations loggin mecanism
+- stablish a operations loggin mecanism
 - Configure snowflakes connection
 - configure swagger
 - configure caching module "redis"

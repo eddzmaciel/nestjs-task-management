@@ -202,3 +202,25 @@ JSON Web Token can be decoded by anyone. They Should not contain sensitive infor
 it is useful for front-end applications to use these tokens to toggle
 
 ## Create a database relation
+
+## Logging Process
+
+### Types of logs
+
+1. Log - General pupose logging of important information
+2. Warning- unhandled issue that is not a fatal or destructive
+3. Error - unhandled issue that is fatal or destructive
+4. Debug - useful information that can help us debug the logic in case of error/ warning. Intended for developers
+5. Verbose - Information providing insights about the behaviour of the application. Intended for operators (for example, support), usually "too much information"
+
+#### Log levels
+
+- develop (log, error, warning, debug, verbose)
+- staging (log, error, warning)
+- production (log, error)
+
+#### advanced libraries:
+
+https://github.com/winstonjs/winston
+https://www.npmjs.com/package/bunyan
+https://www.npmjs.com/package/bino?activeTab=explore

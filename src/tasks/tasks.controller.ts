@@ -30,11 +30,31 @@ import { User } from '../auth/entities/user.entity';
 
 //Custom Decorators
 import { GetUser } from 'src/auth/decorators/get-user.decorator';
+import { Logger } from '@nestjs/common';
 
 @Controller('tasks')
 @UseGuards(AuthGuard())
 export class TasksController {
+  // Creating a instance of the logger
+  // assigning the context, in this way we are going to know where this log is coming from
+  private logger = new Logger('TaskController', { timestamp: true });
   constructor(private tasksService: TasksService) {}
+
+  @Get()
+  getTasks(
+    @Query() filterDto: GetTasksFilterDto,
+    /* to be sure that we are retrieving  only the tasks 
+       that belongs to the logged user 
+    */
+    @GetUser() user: User,
+  ): Promise<Task[]> {
+    this.logger.verbose(
+      `User "${user.username}" retrieving all tasks, FILTERS: ${JSON.stringify(
+        filterDto,
+      )}`,
+    );
+    return this.tasksService.getTasks(filterDto, user);
+  }
 
   @Get('/:id')
   getTaskById(@Param('id') id: string, @GetUser() user: User): Promise<Task> {
@@ -47,6 +67,11 @@ export class TasksController {
     //with this created Decorator we are getting access to our entire user
     @GetUser() user: User,
   ): Promise<Task> {
+    this.logger.verbose(
+      `User "${user.username}" creating a new task, DATA: ${JSON.stringify(
+        createTaskDto,
+      )}`,
+    );
     return this.tasksService.createTask(createTaskDto, user);
   }
 
@@ -65,16 +90,5 @@ export class TasksController {
     //here we are sure that we are passing the validation in the DTO
     const { status } = updateTaskStatusDto;
     return this.tasksService.updateTaskStatus(id, status, user);
-  }
-
-  @Get()
-  getTasks(
-    @Query() filterDto: GetTasksFilterDto,
-    /* to be sure that we are retrieving  only the tasks 
-       that belongs to the logged user 
-    */
-    @GetUser() user: User,
-  ): Promise<Task[]> {
-    return this.tasksService.getTasks(filterDto, user);
   }
 }
