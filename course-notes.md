@@ -224,3 +224,52 @@ it is useful for front-end applications to use these tokens to toggle
 https://github.com/winstonjs/winston
 https://www.npmjs.com/package/bunyan
 https://www.npmjs.com/package/bino?activeTab=explore
+
+# Configuration
+
+- Central way of defining values that are loaded upon starting the application (should not be changed during runtime).
+- Configuration per environment - development, staging, production etc
+- Configuration can be deined into the code base. Useful if you work with multiple developers via version control
+- Can be defined as many ways (JSON, YAML, XML, Envoriment Variables, etc), using solutions or open-source libraries
+
+## Codebase VS Environment Variables
+
+- You could define configurations in your codebase. For example, in a config folder.
+- You could also support configuring values via environment variables (which are provided when running the application)
+
+- **Example:**
+
+  - Non-sensitive information such as the port to run the application on, will be defined in the code base.
+  - Sensitive information such a database username and password for production mode, will be provided via environment variables upon runnig th application
+
+  - using cross-env globally: > npm install -g cross-env
+
+  ### Continuing further
+
+- Following this section, you will end up adding environment variables to your package.json scripts.
+
+- For example, in the lecture "Setting up ConfigModule", you will end up with:
+
+- "start:dev": "STAGE=dev nest start --watch",
+
+- You will need to add "cross-env" to that script, otherwise it will not work. So the final result should be:
+
+- "start:dev": "cross-env STAGE=dev nest start --watch",
+
+- And this should be the case for every script you have in your package.json that requires env variables (in this course we do start:dev, start:debug, start:prod, and test.
+
+### Environment Variables
+
+- Global nodeJs env variables : process.env
+- how to define it: MY_VARIABLE="myvalue" npm run start:dev
+
+### Config schema validation
+
+- install > npm install @hapi/joi
+- adding the types: > npm install -D @types/hapi\_\_joi
+
+- create a ./ config.schema.ts --> we are going to define our schema
+
+## JWT Secret configuration
+
+- generate the secret using this page: https://passwordsgenerator.net/

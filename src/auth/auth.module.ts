@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 //Dependences
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -18,17 +19,22 @@ import { JwtStrategy } from './jwt.strategy';
 @Module({
   //adding our repository into our module
   imports: [
+    ConfigModule,
     PassportModule.register({
       defaultStrategy: 'jwt',
     }),
     //this exports a JWT service
     //here we are going to stablish the secret
-    JwtModule.register({
-      secret: 'topSecret51',
-      // the token expiration time
-      signOptions: {
-        expiresIn: 3600,
-      },
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get('JWT_SECRET'), //'topSecret51',
+        // the token expiration time
+        signOptions: {
+          expiresIn: 3600,
+        },
+      }),
     }),
     TypeOrmModule.forFeature([UsersRepository]),
   ],

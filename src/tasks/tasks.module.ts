@@ -11,6 +11,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 //Respositories
 import { TasksRepository } from './repositories/tasks.repository';
 import { AuthModule } from '../auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [

@@ -3,10 +3,10 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
 //Interceptors
-/*
-we can apply interceptors in handler level,controller level and application level
-*/
+/* we can apply interceptors in handler level,controller level and application level*/
 import { TransformInterceptor } from './shared/interceptors/transform.interceptor';
+
+//console.log(process.env.MY_VARIABLE);
 
 async function bootstrap() {
   //Implementing logging feature
