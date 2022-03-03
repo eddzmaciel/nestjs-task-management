@@ -27,10 +27,13 @@ export class TasksService {
     return this.tasksRepository.getTasks(filterDto, user);
   }
 
-  async getTaskById(id: string): Promise<Task> {
-    const found = await this.tasksRepository.findOne(id);
+  async getTaskById(id: string, user: User): Promise<Task> {
+    const found = await this.tasksRepository.findOne({
+      where: { id, user },
+    });
     if (!found) {
-      throw new NotFoundException(`Task with ID "${id}" not found!`);
+      //throw new NotFoundException(`Task with ID "${id}" not found!`);
+      throw new NotFoundException();
     }
     return found;
   }
@@ -41,17 +44,23 @@ export class TasksService {
     return this.tasksRepository.createTask(createTaskDto, user);
   }
 
-  async deleteTask(id: string): Promise<void> {
-    const result = await this.tasksRepository.delete(id);
-    console.log('---> result:', result);
+  async deleteTask(id: string, user: User): Promise<void> {
+    // this is for filter by id and the user task
+    const result = await this.tasksRepository.delete({ id, user });
+    console.log('---> [deleteTask] result:', result);
+
     if (result['affected'] === 0) {
       throw new NotFoundException(`Task with ID "${id}" not found!`);
     }
   }
 
-  async updateTaskStatus(id: string, status: TaskStatus): Promise<Task> {
+  async updateTaskStatus(
+    id: string,
+    status: TaskStatus,
+    user: User,
+  ): Promise<Task> {
     //find if task exist
-    const task = await this.getTaskById(id);
+    const task = await this.getTaskById(id, user);
     task.status = status;
     //save updated task
     await this.tasksRepository.save(task);
