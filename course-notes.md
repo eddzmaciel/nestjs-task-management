@@ -128,6 +128,32 @@ true)
 > -e POSTGRES_PASSWORD=postgres (this is environment variable setting a password)
 > -d postgres (is going to run in detached mode, if you run your terminal it will keep running )
 
+- Mongodb:
+  > docker container run --name dbtasks --publish 27017:27017 -d mongo
+
+1. Create a mongodb docker container using mongo image
+   > docker container run --name mydatabase --publish 27017:27017 -d mongo
+2. Get access into running mongo container bash.
+   > docker container exec -it mydatabase bash
+
+(this will login you to the bash)
+
+3. Then run mongo by typing following command. it will start the mongo shell.
+   mongo
+4. Create you desired database (ex: mydbone) with following command.
+   use mydbone
+5. Then create a user to grant privileges to your database.
+   db.createUser({ user: "username", pwd: "password", roles: [] })
+   this will create a user for your database and to see the users type show users on terminal. for more info : mongodb official
+6. Exit from the mongo shell by typing exit command. now you are on the bash.
+   exit
+7. Now enable authentication to created database by typing following command on the bash.
+   mongo --port 27017 -u username -p password --authenticationDatabase mydbone
+
+8. Now enable authentication to created database by typing following command on the bash.
+   mongo --port 27017 -u username -p password --authenticationDatabase mydbone
+   now you should be able to connect to the mydbone database with the given username and password.
+
 - **check list of docker images running:**
   > docker container ls
 - **stop docker image:**
@@ -273,3 +299,8 @@ https://www.npmjs.com/package/bino?activeTab=explore
 ## JWT Secret configuration
 
 - generate the secret using this page: https://passwordsgenerator.net/
+
+## Consuming API with a frontend application
+
+- **Repo:** https://github.com/arielweinberger/task-management-frontend
+  -- alternative : https://github.com/llaenowyd/next-task-management

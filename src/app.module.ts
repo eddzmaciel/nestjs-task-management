@@ -1,15 +1,19 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
 
-//TypeORM
+//Custom modules
 import { TasksModule } from './tasks/tasks.module';
 import { AuthModule } from './auth/auth.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+
+//DB Modules
+import { MongodbModule } from './databases/mongodb/mongodb.module';
+import { PostgresModule } from './databases/postgres/postgres.module';
+
+//Schema  validators
 import { configValidationSchema } from './config.schema';
 
 // here we define the stage environment
 //  "start:dev": "cross-env STAGE=dev nest start --watch",
-
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -19,52 +23,10 @@ import { configValidationSchema } from './config.schema';
       validationSchema: configValidationSchema,
     }),
     TasksModule,
-    /* 
-     ## Asyncronous module initialization
-     ## Database connection ##
-      wait till the config module is ready with the values 
-    */
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      /*  "inject[ ]" indicates what services from "ConfigModule" 
-        you are going  to inject to the "useFactory" function */
-      inject: [ConfigService],
-      /* 
-        - with "useFactory"  we can stablish a specific process and 
-        - what this returns will be our configuration,
-        - you can do depencency injection here
-      */
-      useFactory: async (configService: ConfigService) => ({
-        type: 'postgres',
-        // "autoLoadEntities" will automatically load existing entities
-        autoLoadEntities: true,
-        // "synchronize" is how to translate to db tables in schemas
-        synchronize: true,
-        host: configService.get('DB_HOST'),
-        port: configService.get('DB_PORT'),
-        username: configService.get('DB_USERNAME'),
-        password: configService.get('DB_PASSWORD'),
-        database: configService.get('DB_DATABASE'),
-      }),
-    }),
-    /*
-      ## Syncronous module initialization
-      ## Database connection ##
-   */
-    // TypeOrmModule.forRoot({
-    //   type: 'postgres',
-    //   host: 'localhost',
-    //   port: 5432,
-    //   username: 'postgres',
-    //   password: 'postgres',
-    //   database: 'task-management',
-    //   //will automatically load existing entities
-    //   //how to translate to db tables in schemas
-    //   autoLoadEntities: true,
-    //   synchronize: true,
-    // }),
-
     AuthModule,
+    // PostgresDb connection
+    PostgresModule,
+    MongodbModule,
   ],
   // controllers: [],
   // providers: [],
