@@ -11,8 +11,8 @@ import { ConfigModule } from '@nestjs/config';
       useFactory: async () => {
         return {
           uri: 'mongodb://localhost:27017/db_tasks?retryWrites=true&w=majority',
-          //   user: 'adm_eddzmaciel',
-          //   pass: 'Pass1234*',
+          //   user: '******',
+          //   pass: '******',
           useNewUrlParser: true,
           useUnifiedTopology: true,
         };
